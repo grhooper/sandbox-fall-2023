@@ -6,82 +6,89 @@ public class SinglyLinkedList<E> implements LinkedList<E> {
 
     private Node head;
     private Node tail;
+    private int count;
 
     public SinglyLinkedList() {
         head = null;
         tail = null;
-        
+        count = 0;
     }
 
     @Override
     public void addFirst(E element) {
 
-        Node newNode = new Node(element, head); //1 & 2
+        Node newNode = new Node(element, head); // 1 & 2
 
-        if (head != null){
+        if (head == null) { // corner case
             head = newNode;
             tail = head;
         } else {
-            head = newNode;
+            head = newNode; // 3
         }
-        
+        count++;
     }
 
     @Override
     public void addLast(E element) {
 
-        Node newNode = new Node(element, null);
+        Node newNode = new Node(element, null);  // 1
 
-        if (tail == null){
+        if (tail == null) {  // corner case
             tail = newNode;
-            head = newNode;
+            head = tail;
         } else {
-            tail.next = newNode;
-            tail = newNode;
+            tail.next = newNode; // 2
+            tail = newNode; // 3
         }
-       
+        count++;
     }
 
     @Override
     public E pollFirst() {
 
-        E element;
-        if (head == null){
-            element = null;
-        } else{
-            element = head.element;
+        E element; // 1
+        if (head == null) {
+            element = null; // 1
+        } else {
+            element = head.element; // 1
 
-            Node next = head.next;
-            head.next = null;
-            head = next;
+            Node next = head.next; // 2
+            head.next = null; // 3
+            head = next; // 4
         }
-        
+        count--;
         return element;
     }
 
     @Override
     public E pollLast() {
-            E element;
-            if (tail == null){
-                element = null;
-            } else{
-                element = tail.element;
-                if (head == tail){
-                    head = null;
-                    tail = null;
-                } else{
-                    Node current = head;
-                    Node previous = head;
-                    while(current != null){
-                        previous = current;
-                        current = current.next;
-                    }
-                    tail = previous;
-                    tail.next = null;
+
+        E element; // 1
+        if (tail == null) {
+            element = null;
+        } else {
+
+            element = tail.element; // 1
+
+            if (head == tail) {
+                // if list is one element
+                head = null;
+                tail = null;
+            } else {
+
+                // if list is more than one element...
+                Node current = head; // 2
+                Node previous = head; // 2
+                while(current.next != null){ // 2
+                    previous = current;
+                    current = current.next;
                 }
+                tail = previous; // 3
+                tail.next = null; // 4
             }
-            
-            return element;
+        }
+        count--;
+        return element;
     }
 
     @Override
@@ -105,17 +112,18 @@ public class SinglyLinkedList<E> implements LinkedList<E> {
     }
 
     @Override
-    public Object size() {
-        return null;
+    public int size() {
+        return this.count;
     }
 
     @Override
     public String toString() {
+
         StringBuilder builder = new StringBuilder("[");
         StringJoiner joiner = new StringJoiner(", ");
         Node current = head;
 
-        while(current != null){
+        while( current != null) {
             joiner.add(current.element.toString());
             current = current.next;
         }
