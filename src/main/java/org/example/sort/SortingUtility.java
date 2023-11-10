@@ -2,6 +2,7 @@ package org.example.sort;
 
 public class SortingUtility {
 
+
     public static <T extends Comparable<T>> void selectionSort(T[] data){
 
         int min;
